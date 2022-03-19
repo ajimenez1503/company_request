@@ -42,7 +42,7 @@ mvn clean install spring-boot:run
 - Open `http://localhost:8080`
 ![img.png](img/web_view.png)
 
-## Containerising the app
+Containerising the app
 - Install docker
 - Create Dockerfile in the root directory
 ```shell
@@ -79,4 +79,19 @@ docker run \
   -p 8080:8080 \
   -e MONGO_URL=mongodb://mongo:27017/dev \
   company_request
+```
+
+## Uploading the container image to DockerHub
+- Connect to the Docker Hub account:
+```shell
+docker login
+```
+- Set tag:
+```shell
+docker tag company_request ajimenez15/company_request:1.0.0
+```
+- Create repository in Dockerhub
+- Upload image to DockerHub https://hub.docker.com/repository/docker/ajimenez15/company_request
+```shell
+docker push ajimenez15/company_request:1.0.0
 ```
