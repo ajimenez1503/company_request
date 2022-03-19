@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
 </head>
 <body class="ph3 pt0 pb4 mw7 center sans-serif">
-<p class="f5 mt1 mb4 lh-copy">A simple Request taking app.</p>
+<p class="f5 mt1 mb4 lh-copy">A simple request taking app</p>
 <form action="/request" method="POST" enctype="multipart/form-data">
     <ol class="list pl0">
         <li class="mv3"><label class="f6 b db mb2" for="description">Write your content here</label>

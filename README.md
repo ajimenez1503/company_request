@@ -1,4 +1,4 @@
-#How to build company_request
+# How to build company_request
 
 In this guide you will launch a local Kubernetes cluster, develop an app using the Spring Boot framework and deploy it
 as a container in Kubernetes.
@@ -40,3 +40,43 @@ mongod
 mvn clean install spring-boot:run
 ```
 - Open `http://localhost:8080`
+![img.png](img/web_view.png)
+
+## Containerising the app
+- Install docker
+- Create Dockerfile in the root directory
+```shell
+FROM adoptopenjdk/openjdk11:jdk-11.0.2.9-slim
+WORKDIR /opt
+ENV PORT 8080
+EXPOSE 8080
+COPY target/*.jar /opt/app.jar
+ENTRYPOINT exec java $JAVA_OPTS -jar app.jar
+```
+- Build the container image
+```shell
+docker build -t company_request .
+```
+- Create a new Docker network.
+  - The company_request and mongodb containers should communicate with each other.
+```shell
+docker network create company_request_network
+```
+- Run the mongodb docker image:
+```shell
+docker run \
+  --name=mongo \
+  --rm \
+  --network=company_request_network \
+  mongo
+```
+- Run the company_request docker image:
+```shell
+docker run \
+  --name=company_request \
+  --rm \
+  --network=company_request_network \
+  -p 8080:8080 \
+  -e MONGO_URL=mongodb://mongo:27017/dev \
+  company_request
+```
