@@ -95,3 +95,65 @@ docker tag company_request ajimenez15/company_request:1.0.0
 ```shell
 docker push ajimenez15/company_request:1.0.0
 ```
+
+## Kubernetes — the container orchestrator
+
+### Creating a local Kubernetes cluster using Minikube
+- Install kubectl https://kubernetes.io/docs/tasks/tools/
+  - kubectl is the primary Kubernetes CLI
+- Install Minikube https://kubernetes.io/docs/tasks/tools/install-minikube/
+- Create a cluster
+```shell
+minikube start
+```
+- Verify the cluster was created
+```shell
+minikube status
+kubectl cluster-info
+```
+
+### Defining a deployment and a service
+- Create a folder named kube in your application directory. It will hold all the Kubernetes YAML files
+```shell
+mkdir kube
+```
+- Create `kube/deployment.yaml` for the spring app deployment.
+- Create `Kube/service.yaml` for the spring app service.
+- Create `kube/mongo.yaml` for the mongodb deployment, service and storage.
+
+### Deploy the application
+- Submit your resource definitions to Kubernetes
+```shell
+kubectl apply -f kube
+```
+- Watch your Pods coming alive
+```shell
+kubectl get pods --watch
+```
+- You should see two Pods transitioning from Pending to ContainerCreating to Running.
+These Pods correspond to the company-request and MongoDB containers.
+As soon as both Pods are in the Running state, your application is ready.
+- In Minikube, a Service can be accessed with the following command:
+The command should print the URL of the company-reqest Service.
+```shell
+minikube service company-request --url
+```
+- You can open the URL in a web browser.
+
+### Scaling your app
+- Increase the number of replicas to 2:
+```shell
+kubectl scale --replicas=2 deployment/company-request
+```
+![img.png](img/pods.png)
+
+### Stop the deployment
+- Find the deployments
+```shell
+kubectl get deploy
+```
+- Delete all the deployments, run below command:
+```shell
+kubectl delete deploy company-request
+kubectl delete deploy mongo
+```

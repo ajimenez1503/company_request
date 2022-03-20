@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: company-request
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: company-request
+  template:
+    metadata:
+      labels:
+        app: company-request
+    spec:
+      containers:
+        - name: app
+          image: ajimenez15/company_request
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo:27017/dev
+          imagePullPolicy: Always
