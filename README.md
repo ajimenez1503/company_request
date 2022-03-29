@@ -170,14 +170,14 @@ minikube delete
 ## Deploy container in Kubernetes in Google cloud
 
 - Log in https://cloud.google.com/
-- Go to `Kubernetes Engine` and into `Clusters` https://console.cloud.google.com/kubernetes/list/
-- 
+- Go to `Kubernetes Engine` and into `Clusters` https://console.cloud.google.com/kubernetes/list/ 
 
 ### Creating a local Kubernetes cluster using Minikube
 
 - Create a cluster:
   - Name `k8s-docker-company-request`
   - Choose zone.
+
 ![img.png](img/google_cluster.png)
 - Connect to the cluster running the Google cloud shell:
 ```shell
@@ -195,9 +195,9 @@ kubectl apply -f kube
 - In the `Workloads` tab, select `company-request`
 ![img.png](img/google_workloads.png)
 - Search for `Exposing services`, there you will find the IP in my case http://34.135.215.247:80
-
 ![img.png](img/google_expose_ip.png)
 - Open the application.
 ![img.png](img/google_app.png)
+
 ### Stop the deployment
 - In the cluster tab, select delete this cluster.
