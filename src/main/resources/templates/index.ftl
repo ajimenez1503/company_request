@@ -3,6 +3,7 @@
 <head>
     <title></title>
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
 <body class="ph3 pt0 pb4 mw7 center sans-serif">
 <p class="f5 mt1 mb4 lh-copy">A simple request taking app</p>

@@ -1,10 +1,9 @@
-# How to build company_request
+# How to build `company_request`
 
 In this guide you will launch a local Kubernetes cluster, develop an app using the Spring Boot framework and deploy it
 as a container in Kubernetes.
 
-Ref:
-- https://learnk8s.io/spring-boot-kubernetes-guide
+Reference: https://learnk8s.io/spring-boot-kubernetes-guide
 
 ## Create and run a Spring Boot Application
 
@@ -42,9 +41,9 @@ mvn clean install spring-boot:run
 - Open `http://localhost:8080`
 ![img.png](img/web_view.png)
 
-Containerising the app
+## Containerising the app
 - Install docker
-- Create Dockerfile in the root directory
+- Create `Dockerfile` in the root directory
 ```shell
 FROM adoptopenjdk/openjdk11:jdk-11.0.2.9-slim
 WORKDIR /opt
@@ -58,7 +57,7 @@ ENTRYPOINT exec java $JAVA_OPTS -jar app.jar
 docker build -t company_request .
 ```
 - Create a new Docker network.
-  - The company_request and mongodb containers should communicate with each other.
+  - The `company_request` and `mongodb` containers should communicate with each other.
 ```shell
 docker network create company_request_network
 ```
@@ -81,7 +80,7 @@ docker run \
   company_request
 ```
 
-## Uploading the container image to DockerHub
+### Uploading the container image to DockerHub
 - Connect to the Docker Hub account:
 ```shell
 docker login
@@ -96,7 +95,20 @@ docker tag company_request ajimenez15/company_request:1.0.0
 docker push ajimenez15/company_request:1.0.0
 ```
 
+![img.png](img/dockerhub.png)
+
 ## Kubernetes — the container orchestrator
+
+### Defining a deployment and a service
+- Create a folder named kube in your application directory. It will hold all the Kubernetes YAML files
+```shell
+mkdir kube
+```
+- Create `kube/deployment.yaml` for the spring app deployment.
+- Create `Kube/service.yaml` for the spring app service.
+- Create `kube/mongo.yaml` for the mongodb deployment, service and storage.
+
+## Deploy container in Kubernetes locally
 
 ### Creating a local Kubernetes cluster using Minikube
 - Install kubectl https://kubernetes.io/docs/tasks/tools/
@@ -112,16 +124,7 @@ minikube status
 kubectl cluster-info
 ```
 
-### Defining a deployment and a service
-- Create a folder named kube in your application directory. It will hold all the Kubernetes YAML files
-```shell
-mkdir kube
-```
-- Create `kube/deployment.yaml` for the spring app deployment.
-- Create `Kube/service.yaml` for the spring app service.
-- Create `kube/mongo.yaml` for the mongodb deployment, service and storage.
-
-### Deploy the application
+### Deploy the application locally
 - Submit your resource definitions to Kubernetes
 ```shell
 kubectl apply -f kube
@@ -133,12 +136,14 @@ kubectl get pods --watch
 - You should see two Pods transitioning from Pending to ContainerCreating to Running.
 These Pods correspond to the company-request and MongoDB containers.
 As soon as both Pods are in the Running state, your application is ready.
-- In Minikube, a Service can be accessed with the following command:
-The command should print the URL of the company-reqest Service.
+- In Minikube, a Service can be accessed with the following command.
+The command should print the URL of the company-request Service.
 ```shell
 minikube service company-request --url
 ```
-- You can open the URL in a web browser.
+- You can open the URL `http://192.168.49.2:32286` in a web browser.
+
+![img.png](img/k8s_web.png)
 
 ### Scaling your app
 - Increase the number of replicas to 2:
@@ -157,3 +162,42 @@ kubectl get deploy
 kubectl delete deploy company-request
 kubectl delete deploy mongo
 ```
+- Delete the cluster
+```shell
+minikube delete
+```
+
+## Deploy container in Kubernetes in Google cloud
+
+- Log in https://cloud.google.com/
+- Go to `Kubernetes Engine` and into `Clusters` https://console.cloud.google.com/kubernetes/list/
+- 
+
+### Creating a local Kubernetes cluster using Minikube
+
+- Create a cluster:
+  - Name `k8s-docker-company-request`
+  - Choose zone.
+![img.png](img/google_cluster.png)
+- Connect to the cluster running the Google cloud shell:
+```shell
+gcloud container clusters get-credentials k8s-docker-company-request --zone us-central1-c --project analog-hull-344411
+```
+
+### Deploy the application
+
+- upload the folder `kube`
+- Deploy the container in the cluster.
+```shell
+kubectl apply -f kube
+```
+![img.png](img/google_deploy.png)
+- In the `Workloads` tab, select `company-request`
+![img.png](img/google_workloads.png)
+- Search for `Exposing services`, there you will find the IP in my case http://34.135.215.247:80
+
+![img.png](img/google_expose_ip.png)
+- Open the application.
+![img.png](img/google_app.png)
+### Stop the deployment
+- In the cluster tab, select delete this cluster.
