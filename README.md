@@ -172,7 +172,7 @@ minikube delete
 - Log in https://cloud.google.com/
 - Go to `Kubernetes Engine` and into `Clusters` https://console.cloud.google.com/kubernetes/list/ 
 
-### Creating a local Kubernetes cluster using Minikube
+### Creating a Kubernetes cluster
 
 - Create a cluster:
   - Name `k8s-docker-company-request`
